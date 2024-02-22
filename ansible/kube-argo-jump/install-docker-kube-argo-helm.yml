@@ -1,0 +1,22 @@
+---
+- name: Pull and execute script from Git repository
+  hosts: localhost
+  tasks:
+    - name: Clone Git repository
+      git:
+        repo: <GIT_REPOSITORY_URL>
+        dest: /tmp/script_repo
+        clone: single
+        depth: 1
+      become: yes
+
+    - name: Execute script.sh
+      command: /bin/bash /tmp/script_repo/script.sh
+      become: yes
+
+    - name: Delete script.sh
+      file:
+        path: /tmp/script_repo/script.sh
+        state: absent
+      become: yes
+

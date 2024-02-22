@@ -1,0 +1,45 @@
+---
+- name: Execute Shell Scripts on java_jenkins_maven
+  hosts: java_jenkins_maven
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Pull and execute install script
+      fetch:
+        src: /tmp/ansible/java_jenkins_maven/install.sh
+        dest: /tmp/install.sh
+        flat: yes
+        fail_on_missing: yes
+        validate_checksum: yes
+      become: true
+      delegate_to: 10.0.1.5
+
+    - name: Execute install script
+      shell: /tmp/install.sh
+
+    - name: Pull and execute webhook script
+      fetch:
+        src: /tmp/ansible/java_jenkins_maven/webhook.sh
+        dest: /tmp/webhook.sh
+        flat: yes
+        fail_on_missing: yes
+        validate_checksum: yes
+      become: true
+      delegate_to: 10.0.1.5
+
+    - name: Execute webhook script
+      shell: /tmp/webhook.sh
+
+    - name: Pull and execute pipeline script
+      fetch:
+        src: /tmp/ansible/java_jenkins_maven/pipeline.sh
+        dest: /tmp/pipeline.sh
+        flat: yes
+        fail_on_missing: yes
+        validate_checksum: yes
+      become: true
+      delegate_to: 10.0.1.5
+
+    - name: Execute pipeline script
+      shell: /tmp/pipeline.sh
+
