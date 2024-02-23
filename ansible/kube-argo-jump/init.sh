@@ -18,15 +18,15 @@ echo "ancon ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 sudo su - ancon << EOF
 
 # Generate SSH key pair
-ssh-keygen -t rsa -b 2048 -N "" -f ~/.ssh/id_rsa
+ssh-keygen -t rsa -b 2048 -N "" -f ~/.ssh/id_rsa-1
 
 # Define IP addresses
 java_jenkins_maven_ip="10.0.1.6"
 nexus_ip="10.0.2.5"
 
 # Copy SSH public key to java_jenkins_maven_ip and nexus_ip
-ssh-copy-id -i ~/.ssh/id_rsa.pub ancon@${java_jenkins_maven_ip}
-ssh-copy-id -i ~/.ssh/id_rsa.pub ancon@${nexus_ip}
+ssh-copy-id -i ~/.ssh/id_rsa-1.pub ancon@${java_jenkins_maven_ip}
+ssh-copy-id -i ~/.ssh/id_rsa-1.pub ancon@${nexus_ip}
 
 # Clone the repository
 git clone https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app
