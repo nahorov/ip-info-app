@@ -28,11 +28,14 @@ nexus_ip="10.0.2.5"
 ssh-copy-id -i ~/.ssh/id_rsa.pub ancon@${java_jenkins_maven_ip}
 ssh-copy-id -i ~/.ssh/id_rsa.pub ancon@${nexus_ip}
 
-# Download the ansible folder from the provided URL
-wget -r -nH --cut-dirs=2 --no-parent --reject="index.html*" https://github.com/nahorov/ip-info-app/tree/master/ansible -P /tmp/ansible
+# Clone the repository
+git clone https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app
+
+# Remove the terraform and ip-info-app folders
+rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app
 
 # Run the playbook
-ansible-playbook /tmp/ansible/playbook.yml
+ansible-playbook /tmp/ip-info-app/ansible/playbook.yml
 
 EOF
 

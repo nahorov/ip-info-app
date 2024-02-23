@@ -6,7 +6,7 @@
   tasks:
     - name: Pull and execute install script
       fetch:
-        src: /tmp/ansible/java_jenkins_maven/install.sh
+        src: /tmp/ip-info-app/ansible/java_jenkins_maven/install.sh
         dest: /tmp/install.sh
         flat: yes
         fail_on_missing: yes
@@ -19,7 +19,7 @@
 
     - name: Pull and execute webhook script
       fetch:
-        src: /tmp/ansible/java_jenkins_maven/webhook.sh
+        src: /tmp/ip-info-app/ansible/java_jenkins_maven/webhook.sh
         dest: /tmp/webhook.sh
         flat: yes
         fail_on_missing: yes
@@ -32,7 +32,7 @@
 
     - name: Pull and execute pipeline script
       fetch:
-        src: /tmp/ansible/java_jenkins_maven/pipeline.sh
+        src: /tmp/ip-info-app/ansible/java_jenkins_maven/pipeline.sh
         dest: /tmp/pipeline.sh
         flat: yes
         fail_on_missing: yes
