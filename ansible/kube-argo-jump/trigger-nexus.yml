@@ -1,0 +1,57 @@
+---
+- name: Automate ArgoCD update and Kubernetes service configuration
+  hosts: localhost
+  tasks:
+    - name: Create new user in ArgoCD
+      uri:
+        url: "http://argocd-server-argocd.apps.cluster.local/api/v1/account"
+        method: POST
+        user: admin
+        password: admin
+        force_basic_auth: yes
+        body: '{"username": "admin", "password": "admin"}'
+        headers:
+          Content-Type: "application/json"
+      register: result_create_user
+
+    - name: Check if user creation successful
+      debug:
+        msg: "User created successfully with password: admin"
+      when: result_create_user.status == 200
+
+    - name: Trigger ArgoCD sync
+      uri:
+        url: "http://argocd-server-argocd.apps.cluster.local/api/v1/applications/ip-info-app/sync"
+        method: POST
+        user: admin
+        password: admin
+        force_basic_auth: yes
+        status_code: 200
+      register: result_argo
+
+    - name: Check ArgoCD sync result
+      debug:
+        msg: "ArgoCD sync triggered successfully"
+      when: result_argo.status == 200
+
+    - name: Expose service via NodePort
+      k8s:
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: ip-info-app-service
+            namespace: default  # Update namespace if needed
+          spec:
+            selector:
+              app: ip-info-app
+            type: NodePort
+            ports:
+              - port: 80
+                targetPort: 8080  # Assuming your app runs on port 8080
+                nodePort: 30000    # Use a free port in your range
+
+    - name: Check Kubernetes service creation result
+      debug:
+        msg: "Kubernetes service created successfully"
+

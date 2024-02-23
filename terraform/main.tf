@@ -1,5 +1,21 @@
+
+
+terraform {
+    required_providers {
+      aws = {
+        source = "hashicorp/aws"
+        version = "5.37.0"
+	}
+    null = {
+      source = "hashicorp/null"
+      version = "3.2.2"
+    }
+  }
+  required_version = ">=1.0.0"
+}
+
 provider "aws" {
-  region = "ap-south-1"
+	region = "ap-south-1"
 }
 
 resource "aws_vpc" "pipeline_vpc" {
@@ -20,43 +36,43 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_instance" "kube_argo_jump" {
-  ami           = "ami-0449c34f967dbf18a"
+  ami           = "ami-06b72b3b2a773be2b"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.5"  # Static private IP
   tags = {
     Name = "kube-argo-jump"
   }
-key_name = "2024-rocky-vm"
-  user_data = <<-EOF
-              #!/bin/bash
-wget -O /tmp/init.sh https://raw.githubusercontent.com/nahorov/ip-info-app/master/ansible/kube-argo-jump/init.sh
-chmod +x /tmp/init.sh
-sudo su -
-sh /tmp/init.sh
-EOF
+	key_name = "testabc"
+  	user_data = <<-EOF
+              		#!/bin/bash
+			wget -O /tmp/init.sh https://raw.githubusercontent.com/nahorov/ip-info-app/master/ansible/kube-argo-jump/init.sh
+			chmod +x /tmp/init.sh
+			sudo su -
+			sh /tmp/init.sh
+		       EOF
 }
 
 resource "aws_instance" "java_jenkins_maven" {
-  ami           = "ami-0449c34f967dbf18a"
+  ami           = "ami-06b72b3b2a773be2b"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.6"  # Static private IP
   tags = {
     Name = "java-jenkins-maven"
   }
-  key_name = "2024-rocky-vm"
+  key_name = "testabc"
 }
 
 resource "aws_instance" "nexus" {
-  ami           = "ami-0449c34f967dbf18a"
+  ami           = "ami-06b72b3b2a773be2b"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet.id
   private_ip    = "10.0.2.5"  # Static private IP
   tags = {
     Name = "nexus"
   }
-  key_name = "2024-rocky-vm"
+  key_name = "testabc"
 }
 
 resource "aws_security_group" "pipeline_sg" {

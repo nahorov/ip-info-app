@@ -4,19 +4,18 @@
   tasks:
     - name: Clone Git repository
       git:
-        repo: <GIT_REPOSITORY_URL>
-        dest: /tmp/script_repo
+        repo: https://github.com/nahorov/ip-info-app.git
+        dest: /tmp/ip-info-app
         clone: single
         depth: 1
+        ref: master
       become: yes
 
     - name: Execute script.sh
-      command: /bin/bash /tmp/script_repo/script.sh
+      command: /bin/bash /tmp/ip-info-app/ansible/kube-argo-jump/script.sh
       become: yes
 
-    - name: Delete script.sh
-      file:
-        path: /tmp/script_repo/script.sh
-        state: absent
+    - name: Execute trigger-nexus.yml
+      include_tasks: /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml
       become: yes
 

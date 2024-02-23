@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Function to wait for a specific period
+wait_for() {
+  echo "Waiting for $1 seconds..."
+  sleep "$1"
+}
+
 # Update the system
 yum update -y
 
@@ -36,6 +42,25 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer", 
 
 # Clone the ansible folder from the repository
 wget -r -nH --cut-dirs=4 --no-parent --reject="index.html*" https://github.com/nahorov/ip-info-app/raw/master/ansible -P /tmp
+
+# Wait for 600 seconds (10 minutes)
+wait_for 600
+
+# Generate Helm values file
+cat << EOF | sudo tee /tmp/values.yaml
+# Specify the Docker container image to deploy from Nexus
+image:
+  repository: 10.0.2.5/ip-info-app
+  tag: latest
+
+# Additional configuration options for your application, if any
+config:
+  option1: value1
+  option2: value2
+EOF
+
+# Execute Ansible playbook after waiting
+ansible-playbook /tmp/ansible/trigger-nexus.yml
 
 echo "Setup complete."
 
