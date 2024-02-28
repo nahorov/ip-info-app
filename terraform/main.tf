@@ -1,21 +1,15 @@
-
-
 terraform {
-    required_providers {
-      aws = {
-        source = "hashicorp/aws"
-        version = "5.37.0"
-	}
-    null = {
-      source = "hashicorp/null"
-      version = "3.2.2"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.0.0"
     }
   }
-  required_version = ">=1.0.0"
+  required_version = ">= 1.0.0"
 }
 
 provider "aws" {
-	region = "ap-south-1"
+  region = "ap-south-1"
 }
 
 resource "aws_vpc" "pipeline_vpc" {
@@ -40,17 +34,14 @@ resource "aws_instance" "kube_argo_jump" {
   instance_type = "t2.medium"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.5"  # Static private IP
-  tags = {
-    Name = "kube-argo-jump"
-  }
-	key_name = "20240228"
-  	user_data = <<-EOF
-              		#!/bin/bash
-			git clone https://github.com/nahorov/ip-info-app /tmp/ip-info-app
-			cd /tmp/ip-info-app/ansible/kube-argo-jump/
-			chmod +x init.sh
-			./init.sh
-		       EOF
+  key_name      = "20240228"
+  user_data     = <<-EOF
+    #!/bin/bash
+    sudo git clone https://github.com/nahorov/ip-info-app /tmp/ip-info-app
+    cd /tmp/ip-info-app/ansible/kube-argo-jump/
+    chmod +x init.sh
+    sudo ./init.sh
+  EOF
 }
 
 resource "aws_instance" "java_jenkins_maven" {
@@ -58,10 +49,7 @@ resource "aws_instance" "java_jenkins_maven" {
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.6"  # Static private IP
-  tags = {
-    Name = "java-jenkins-maven"
-  }
-  key_name = "20240228"
+  key_name      = "20240228"
 }
 
 resource "aws_instance" "nexus" {
@@ -69,57 +57,13 @@ resource "aws_instance" "nexus" {
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet.id
   private_ip    = "10.0.2.5"  # Static private IP
-  tags = {
-    Name = "nexus"
-  }
-  key_name = "20240228"
+  key_name      = "20240228"
 }
 
 resource "aws_security_group" "pipeline_sg" {
   vpc_id = aws_vpc.pipeline_vpc.id
- 
-# Allow SSH from within the VPC
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [aws_vpc.pipeline_vpc.cidr_block]
-  }
-   
-    ingress {
-    from_port   = 0
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 21
-    to_port     = 21
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
+  # Allow SSH from any IP address
   ingress {
     from_port   = 22
     to_port     = 22
@@ -127,6 +71,7 @@ resource "aws_security_group" "pipeline_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Egress rules
   egress {
     from_port   = 0
     to_port     = 0
