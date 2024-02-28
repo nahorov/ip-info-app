@@ -89,7 +89,7 @@ resource "aws_security_group" "pipeline_sg" {
     ingress {
     from_port   = 0
     to_port     = 22
-    protocol    = "ssh"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
    ingress {
