@@ -21,7 +21,7 @@ sudo su - ancon << EOF
 mkdir -p ~/.ssh
 
 # Pull the repository
-git clone https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app
+git clone -b master https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app
 
 # Pull the key-pair file
 cp /tmp/ip-info-app/terraform/20240228.pem ~/.ssh/20240228.pem || { echo "Error: Copying key-pair file failed"; exit 1; }
