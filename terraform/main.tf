@@ -37,7 +37,7 @@ resource "aws_subnet" "private_subnet" {
 
 resource "aws_instance" "kube_argo_jump" {
   ami           = "ami-06b72b3b2a773be2b"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.5"  # Static private IP
   tags = {
