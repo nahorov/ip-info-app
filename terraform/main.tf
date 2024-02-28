@@ -77,8 +77,25 @@ resource "aws_instance" "nexus" {
 
 resource "aws_security_group" "pipeline_sg" {
   vpc_id = aws_vpc.pipeline_vpc.id
-
+ 
+# Allow SSH from within the VPC
   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.pipeline_vpc.cidr_block]
+  }
+  
+
+   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["self"]  # Allow SSH from Terraform's machine
+  }
+
+
+   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
