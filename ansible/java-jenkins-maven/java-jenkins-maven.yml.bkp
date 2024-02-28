@@ -1,6 +1,7 @@
 ---
 - name: Execute Shell Scripts on java_jenkins_maven
-  hosts: localhost
+  hosts: java_jenkins_maven
+  become: true
   gather_facts: false
   tasks:
     - name: Pull and execute install script
@@ -10,14 +11,11 @@
         flat: yes
         fail_on_missing: yes
         validate_checksum: yes
-      delegate_to: 10.0.1.5
       become: true
-      vars:
-        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem"
+      delegate_to: 10.0.1.5
 
     - name: Execute install script
       shell: /tmp/install.sh
-      delegate_to: 10.0.1.5
 
     - name: Pull and execute webhook script
       fetch:
@@ -26,14 +24,11 @@
         flat: yes
         fail_on_missing: yes
         validate_checksum: yes
-      delegate_to: 10.0.1.5
       become: true
-      vars:
-        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem"
+      delegate_to: 10.0.1.5
 
     - name: Execute webhook script
       shell: /tmp/webhook.sh
-      delegate_to: 10.0.1.5
 
     - name: Pull and execute pipeline script
       fetch:
@@ -42,12 +37,9 @@
         flat: yes
         fail_on_missing: yes
         validate_checksum: yes
-      delegate_to: 10.0.1.5
       become: true
-      vars:
-        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem"
+      delegate_to: 10.0.1.5
 
     - name: Execute pipeline script
       shell: /tmp/pipeline.sh
-      delegate_to: 10.0.1.5
 
