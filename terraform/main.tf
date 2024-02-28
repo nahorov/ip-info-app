@@ -85,15 +85,6 @@ resource "aws_security_group" "pipeline_sg" {
     protocol    = "tcp"
     cidr_blocks = [aws_vpc.pipeline_vpc.cidr_block]
   }
-  
-
-   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["self"]  # Allow SSH from Terraform's machine
-  }
-
 
    ingress {
     from_port   = 22
