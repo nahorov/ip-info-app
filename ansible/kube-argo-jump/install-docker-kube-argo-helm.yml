@@ -2,20 +2,6 @@
 - name: Pull and execute script from Git repository
   hosts: localhost
   tasks:
-    - name: Clone Git repository
-      git:
-        repo: https://github.com/nahorov/ip-info-app.git
-        dest: /tmp/ip-info-app
-        clone: single
-        depth: 1
-        ref: master
-      become: yes
-
     - name: Execute script.sh
       command: /bin/bash /tmp/ip-info-app/ansible/kube-argo-jump/script.sh
       become: yes
-
-    - name: Execute trigger-nexus.yml
-      include_tasks: /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml
-      become: yes
-

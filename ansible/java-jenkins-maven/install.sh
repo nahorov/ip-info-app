@@ -26,7 +26,7 @@ sudo sed -i 's/<useSecurity>true<\/useSecurity>/<useSecurity>false<\/useSecurity
 sudo systemctl start jenkins
 
 # Wait for Jenkins to start
-sleep 30
+sleep 60
 
 # Install Jenkins plugins (Maven and Jib)
 sudo wget -O /var/lib/jenkins/plugins/maven-plugin.hpi https://updates.jenkins.io/download/plugins/maven-plugin/latest/maven-plugin.hpi

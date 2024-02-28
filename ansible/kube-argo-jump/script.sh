@@ -6,12 +6,8 @@ wait_for() {
   sleep "$1"
 }
 
-# Update the system
-yum update -y
-
 # Install necessary packages
-yum install -y docker ansible
-
+yum install -y docker
 # Start Docker and enable it to start on boot
 systemctl start docker
 systemctl enable docker
@@ -40,12 +36,6 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 minikube_ip=$(minikube ip)
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer", "externalIPs":["'$minikube_ip'"]}}'
 
-# Clone the ansible folder from the repository
-wget -r -nH --cut-dirs=4 --no-parent --reject="index.html*" https://github.com/nahorov/ip-info-app/raw/master/ansible -P /tmp
-
-# Wait for 600 seconds (10 minutes)
-wait_for 600
-
 # Generate Helm values file
 cat << EOF | sudo tee /tmp/values.yaml
 # Specify the Docker container image to deploy from Nexus
@@ -60,7 +50,7 @@ config:
 EOF
 
 # Execute Ansible playbook after waiting
-ansible-playbook /tmp/ansible/trigger-nexus.yml
+ansible-playbook /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml
 
 echo "Setup complete."
 
