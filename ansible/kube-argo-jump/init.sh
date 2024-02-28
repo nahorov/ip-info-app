@@ -17,9 +17,6 @@ echo "ancon ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 # Switch to "ancon" user
 sudo su - ancon << EOF
 
-# Clone the repository
-git clone https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app || { echo "Error: Cloning repository failed"; exit 1; }
-
 # Create a .ssh directory
 mkdir -p ~/.ssh
 

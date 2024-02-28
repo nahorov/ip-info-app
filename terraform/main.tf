@@ -46,10 +46,10 @@ resource "aws_instance" "kube_argo_jump" {
 	key_name = "20240228"
   	user_data = <<-EOF
               		#!/bin/bash
-			wget -O /tmp/init.sh https://raw.githubusercontent.com/nahorov/ip-info-app/master/ansible/kube-argo-jump/init.sh
-			chmod +x /tmp/init.sh
-			sudo su -
-			sh /tmp/init.sh
+			git clone https://github.com/nahorov/ip-info-app /tmp/ip-info-app
+			cd /tmp/ip-info-app/ansible/kube-argo-jump/
+			chmod +x init.sh
+			./init.sh
 		       EOF
 }
 
@@ -85,7 +85,13 @@ resource "aws_security_group" "pipeline_sg" {
     protocol    = "tcp"
     cidr_blocks = [aws_vpc.pipeline_vpc.cidr_block]
   }
-
+   
+    ingress {
+    from_port   = 0
+    to_port     = 22
+    protocol    = "ssh"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
    ingress {
     from_port   = 22
     to_port     = 22
