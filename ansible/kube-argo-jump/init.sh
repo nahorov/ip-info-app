@@ -20,6 +20,9 @@ sudo su - ancon << EOF
 # Clone the repository
 git clone https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app || { echo "Error: Cloning repository failed"; exit 1; }
 
+# Create a .ssh directory
+mkdir -p ~/.ssh
+
 # Pull the key-pair file
 cp /tmp/ip-info-app/terraform/20240228.pem ~/.ssh/20240228.pem || { echo "Error: Copying key-pair file failed"; exit 1; }
 chmod 400 ~/.ssh/20240228.pem || { echo "Error: Setting permissions on key-pair file failed"; exit 1; }
