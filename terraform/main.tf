@@ -38,6 +38,7 @@ resource "aws_instance" "kube_argo_jump" {
   instance_type = "t2.medium"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.5"  # Static private IP
+  vpc_security_group_ids = [aws_security_group.pipe_sg.id]
   tags = {
     Name = "kube-argo-jump"
   }
@@ -56,6 +57,7 @@ resource "aws_instance" "java_jenkins_maven" {
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public_subnet.id
   private_ip    = "10.0.1.6"  # Static private IP
+  vpc_security_group_ids = [aws_security_group.pipe_sg.id]
   tags = {
     Name = "java-jenkins-maven"
   }
@@ -67,13 +69,14 @@ resource "aws_instance" "nexus" {
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.private_subnet.id
   private_ip    = "10.0.2.5"  # Static private IP
+  vpc_security_group_ids = [aws_security_group.pipe_sg.id]
   tags = {
     Name = "nexus"
   }
   key_name = "20240228"
 }
 
-resource "aws_security_group" "pipeline_sg" {
+resource "aws_security_group" "pipe_sg" {
   vpc_id = aws_vpc.pipeline_vpc.id
 
   ingress {

@@ -4,7 +4,7 @@
 sudo yum update -y
 
 # Install necessary packages
-sudo yum install python3 python3-pip git -y
+sudo yum install git python3 python3-pip git -y
 sudo pip3 install ansible
 
 # Create a new user "ancon" with password "ancon"
@@ -19,6 +19,9 @@ sudo su - ancon << EOF
 
 # Create a .ssh directory
 mkdir -p ~/.ssh
+
+# Pull the repository
+git clone https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app
 
 # Pull the key-pair file
 cp /tmp/ip-info-app/terraform/20240228.pem ~/.ssh/20240228.pem || { echo "Error: Copying key-pair file failed"; exit 1; }
