@@ -43,7 +43,7 @@ resource "aws_instance" "kube_argo_jump" {
   tags = {
     Name = "kube-argo-jump"
   }
-	key_name = "testabc"
+	key_name = "20240228"
   	user_data = <<-EOF
               		#!/bin/bash
 			wget -O /tmp/init.sh https://raw.githubusercontent.com/nahorov/ip-info-app/master/ansible/kube-argo-jump/init.sh
@@ -61,7 +61,7 @@ resource "aws_instance" "java_jenkins_maven" {
   tags = {
     Name = "java-jenkins-maven"
   }
-  key_name = "testabc"
+  key_name = "20240228"
 }
 
 resource "aws_instance" "nexus" {
@@ -72,7 +72,7 @@ resource "aws_instance" "nexus" {
   tags = {
     Name = "nexus"
   }
-  key_name = "testabc"
+  key_name = "20240228"
 }
 
 resource "aws_security_group" "pipeline_sg" {
