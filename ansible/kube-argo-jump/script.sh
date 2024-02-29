@@ -50,7 +50,7 @@ config:
 EOF
 
 # Execute Ansible playbook after waiting
-ansible-playbook /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml
+ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml
 
 echo "Setup complete."
 
