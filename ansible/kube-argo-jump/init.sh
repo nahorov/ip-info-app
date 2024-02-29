@@ -34,7 +34,7 @@ java_jenkins_maven ansible_host=10.0.1.6
 nexus ansible_host=10.0.2.5
 
 [all:vars]
-ansible_user=ancon
+ansible_user=ec2-user
 ansible_ssh_private_key_file="~/.ssh/20240228.pem"
 EOF
 

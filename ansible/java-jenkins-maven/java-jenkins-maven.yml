@@ -1,56 +1,34 @@
 ---
-- name: Execute Shell Scripts on java_jenkins_maven
-  hosts: localhost
-  gather_facts: no
+- name: Deploy and execute scripts on remote host
+  hosts: java_jenkins_maven
+  become: true
+  gather_facts: false
   tasks:
-    - name: Pull and execute install script
-      fetch:
-        src: /tmp/ip-info-app/ansible/java_jenkins_maven/install.sh
-        dest: /tmp/install.sh
-        flat: yes
-        fail_on_missing: yes
-        validate_checksum: yes
-      delegate_to: 10.0.1.6
-      become: true
-      vars:
-        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
+    - name: Copy scripts to remote host
+      ansible.builtin.copy:
+        src: "/tmp/ip-info-app/ansible/java-jenkins-maven/{{ item }}"
+        dest: "/tmp/{{ item }}"
+        mode: "u+rwx,g+rx,o+rx"
+      with_items:
+        - install.sh
+        - webhook.sh
+        - pipeline.sh
 
-    - name: Execute install script
-      shell: "/bin/bash /tmp/install.sh"
+    - name: Execute scripts on remote host
+      ansible.builtin.shell:
+        cmd: "/tmp/{{ item }}"
+      with_items:
+        - "/tmp/install.sh"
+        - "/tmp/webhook.sh"
+        - "/tmp/pipeline.sh"
       become: true
-      delegate_to: 10.0.1.6
 
-    - name: Pull and execute webhook script
-      fetch:
-        src: /tmp/ip-info-app/ansible/java_jenkins_maven/webhook.sh
-        dest: /tmp/webhook.sh
-        flat: yes
-        fail_on_missing: yes
-        validate_checksum: yes
-      delegate_to: 10.0.1.6
-      become: true
-      vars:
-        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
-
-    - name: Execute webhook script
-      shell: "/bin/bash /tmp/webhook.sh"
-      become: true
-      delegate_to: 10.0.1.6
-
-    - name: Pull and execute pipeline script
-      fetch:
-        src: /tmp/ip-info-app/ansible/java_jenkins_maven/pipeline.sh
-        dest: /tmp/pipeline.sh
-        flat: yes
-        fail_on_missing: yes
-        validate_checksum: yes
-      delegate_to: 10.0.1.6
-      become: true
-      vars:
-        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
-
-    - name: Execute pipeline script
-      shell: "/bin/bash /tmp/pipeline.sh"
-      become: true
-      delegate_to: 10.0.1.6
+    - name: Remove scripts from remote host
+      ansible.builtin.file:
+        path: "/tmp/{{ item }}"
+        state: absent
+      with_items:
+        - install.sh
+        - webhook.sh
+        - pipeline.sh
 
