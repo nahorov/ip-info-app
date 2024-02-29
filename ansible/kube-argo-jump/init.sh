@@ -4,8 +4,8 @@
 sudo yum update -y
 
 # Install necessary packages
-sudo yum install git python3 python3-pip git -y
-sudo pip3 install ansible
+sudo yum install git python3 python3-pip -y
+sudo pip3 install paramiko ansible
 
 # Create a new user "ancon" with password "ancon"
 sudo useradd -m -s /bin/bash ancon

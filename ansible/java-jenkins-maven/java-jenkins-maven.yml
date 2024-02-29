@@ -1,7 +1,7 @@
 ---
 - name: Execute Shell Scripts on java_jenkins_maven
   hosts: localhost
-  gather_facts: false
+  gather_facts: no
   tasks:
     - name: Pull and execute install script
       fetch:
@@ -10,14 +10,15 @@
         flat: yes
         fail_on_missing: yes
         validate_checksum: yes
-      delegate_to: 10.0.1.5
+      delegate_to: 10.0.1.6
       become: true
       vars:
-        ansible_ssh_common_args: "-vvv -o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
 
     - name: Execute install script
-      shell: /tmp/install.sh
-      delegate_to: 10.0.1.5
+      shell: "/bin/bash /tmp/install.sh"
+      become: true
+      delegate_to: 10.0.1.6
 
     - name: Pull and execute webhook script
       fetch:
@@ -26,14 +27,15 @@
         flat: yes
         fail_on_missing: yes
         validate_checksum: yes
-      delegate_to: 10.0.1.5
+      delegate_to: 10.0.1.6
       become: true
       vars:
-        ansible_ssh_common_args: "-vvv -o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
 
     - name: Execute webhook script
-      shell: /tmp/webhook.sh
-      delegate_to: 10.0.1.5
+      shell: "/bin/bash /tmp/webhook.sh"
+      become: true
+      delegate_to: 10.0.1.6
 
     - name: Pull and execute pipeline script
       fetch:
@@ -42,12 +44,13 @@
         flat: yes
         fail_on_missing: yes
         validate_checksum: yes
-      delegate_to: 10.0.1.5
+      delegate_to: 10.0.1.6
       become: true
       vars:
-        ansible_ssh_common_args: "-vvv -o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -i /home/ancon/.ssh/20240228.pem -l ec2-user"
 
     - name: Execute pipeline script
-      shell: /tmp/pipeline.sh
-      delegate_to: 10.0.1.5
+      shell: "/bin/bash /tmp/pipeline.sh"
+      become: true
+      delegate_to: 10.0.1.6
 
