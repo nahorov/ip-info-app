@@ -18,9 +18,9 @@
       ansible.builtin.shell:
         cmd: "/tmp/{{ item }}"
       with_items:
-        - "/tmp/install.sh"
-        - "/tmp/webhook.sh"
-        - "/tmp/pipeline.sh"
+        - "install.sh"
+        - "webhook.sh"
+        - "pipeline.sh"
       become: true
 
     - name: Remove scripts from remote host

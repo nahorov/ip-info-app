@@ -42,7 +42,7 @@ EOF
 rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error: Removing folders failed"; exit 1; }
 
 # Run the playbook
-ansible-playbook -i inventory.ini /tmp/ip-info-app/ansible/playbook.yml || { echo "Error: Running playbook failed"; exit 1; }
+ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/playbook.yml || { echo "Error: Running playbook failed"; exit 1; }
 
 EOF
 
