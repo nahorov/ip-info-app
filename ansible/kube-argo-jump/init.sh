@@ -36,14 +36,15 @@ nexus ansible_host=10.0.2.5
 [all:vars]
 ansible_user=ec2-user
 ansible_ssh_private_key_file="~/.ssh/20240228.pem"
+ansible_ssh_common_args="-o StrictHostKeyChecking=no"
 EOF
 
 # Remove the terraform and ip-info-app folders
 rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error: Removing folders failed"; exit 1; }
 
-# Run the playbook
-ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/playbook.yml || { echo "Error: Running playbook failed"; exit 1; }
-
+# Run the playbooks
+ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml
+ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml
 EOF
 
 echo "Setup completed successfully."
