@@ -51,6 +51,7 @@ sudo wget -O /tmp/nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix
 # Run the playbooks
 ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml
 ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml
+ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/kube-argo-jump.yml
 EOF
 
 echo "Setup completed successfully."
