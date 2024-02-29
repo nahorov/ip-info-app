@@ -1,85 +1,30 @@
----
-- name: Install Nexus on EC2 in private subnet
-  hosts: 10.0.2.5
-  become: true
+- name: Transfer and execute Java and Nexus setup scripts
+  hosts: nexus
   gather_facts: false
-
   tasks:
-    - name: Download Java and Nexus on Ansible controller
-      ansible.builtin.get_url:
-        url: "{{ item.url }}"
-        dest: "/tmp/{{ item.dest }}"
-        mode: '0644'
-      with_items:
-        - { url: 'https://download.sonatype.com/nexus/3/latest-unix.tar.gz', dest: 'nexus.tar.gz' }
-        - { url: 'https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz', dest: 'java.tar.gz' }
-
-    - name: Copy Java and Nexus files to EC2
+    - name: Copy Java and Nexus tarballs to Nexus host
       ansible.builtin.copy:
         src: "/tmp/{{ item }}"
         dest: "/tmp/{{ item }}"
+        remote_src: yes
       with_items:
-        - nexus.tar.gz
         - java.tar.gz
+        - nexus.tar.gz
 
-    - name: Extract Java
-      ansible.builtin.command: "tar -xvf /tmp/java.tar.gz -C /usr/local/"
-      
-    - name: Create directories and extract Nexus
-      ansible.builtin.command: >
-        tar -xvf /tmp/nexus.tar.gz -C /app && mv /app/nexus-3* /app/nexus
-      args:
-        creates: "/app/nexus/bin/nexus"
-
-    - name: Set ownership
-      ansible.builtin.file:
-        path: "/app/{{ item }}"
-        owner: nexus
-        group: nexus
-        recurse: yes
-      with_items:
-        - nexus
-        - sonatype-work
-
-    - name: Update nexus.rc
-      ansible.builtin.lineinfile:
-        path: "/app/nexus/bin/nexus.rc"
-        line: "run_as_user=\"nexus\""
-        regexp: "^#?run_as_user="
-        state: present
-
-    - name: Create systemd service file
+    - name: Copy install-java-and-nexus.sh script to Nexus host
       ansible.builtin.copy:
-        content: |
-          [Unit]
-          Description=Nexus service
-          After=network.target
+        src: "/tmp/ip-info-app/ansible/nexus/install-java-and-nexus.sh"
+        dest: "/tmp/install-java-and-nexus.sh"
+        mode: "0755"
+        remote_src: yes
 
-          [Service]
-          Type=forking
-          LimitNOFILE=65536
-          User=nexus
-          Group=nexus
-          ExecStart=/app/nexus/bin/nexus start
-          ExecStop=/app/nexus/bin/nexus stop
-          Restart=on-abort
+    - name: Execute install-java-and-nexus.sh script on Nexus host
+      ansible.builtin.shell:
+        cmd: "/bin/bash /tmp/install-java-and-nexus.sh"
+      register: install_result
+      ignore_errors: true
 
-          [Install]
-          WantedBy=multi-user.target
-        dest: /etc/systemd/system/nexus.service
-
-    - name: Reload systemd and start Nexus service
-      ansible.builtin.systemd:
-        daemon_reload: yes
-        name: nexus
-        state: started
-        enabled: yes
-
-    - name: Remove downloaded files from Ansible controller
-      ansible.builtin.file:
-        path: "/tmp/{{ item }}"
-        state: absent
-      with_items:
-        - nexus.tar.gz
-        - java.tar.gz
+    - name: Display install-java-and-nexus.sh execution result
+      debug:
+        var: install_result.stdout_lines
 

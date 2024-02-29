@@ -42,6 +42,12 @@ EOF
 # Remove the terraform and ip-info-app folders
 rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error: Removing folders failed"; exit 1; }
 
+# Download Java JDK Corretto 17
+sudo wget -O /tmp/java.tar.gz https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz
+
+# Download Sonatype Nexus
+sudo wget -O /tmp/nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+
 # Run the playbooks
 ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml
 ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml
