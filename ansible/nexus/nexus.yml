@@ -12,13 +12,6 @@
         - java.tar.gz
         - nexus.tar.gz
 
-    - name: Copy key to connect with Jenkins
-      ansible.builtin.copy
-        src: "~/.ssh/20240228.pem"
-        dest: "/tmp/20240228.pem"
-        mode: "0400"
-        remote_src: false 
-
     - name: Copy install-java-and-nexus.sh script to Nexus host
       ansible.builtin.copy:
         src: "/tmp/ip-info-app/ansible/nexus/install-java-and-nexus.sh"
