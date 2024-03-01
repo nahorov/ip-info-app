@@ -49,8 +49,7 @@ resource "aws_instance" "kube_argo_jump" {
                         chmod +x /tmp/init.sh
                
                         sh /tmp/init.sh >> /tmp/init-diagnosis.log
-			sudo su - ancon -c 'sudo chmod +x /tmp/ip-info-app/ansible/kube-argo-jump/setup-ancon.sh ; sudo sh /tmp/ip-info-app/ansible/kube-argo-jump/setup-ancon.sh >> /tmp/ancon-diagnosis.log'
-			
+		 	sudo su - ancon -c '/tmp/ip-info-app/ansible/kube-argo-jump/setup-ancon.sh >> /tmp/ancon-diagnosis.log'	
                        EOF
 }
 
