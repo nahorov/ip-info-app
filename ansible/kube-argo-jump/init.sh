@@ -14,8 +14,8 @@ echo "ancon:ancon" | sudo chpasswd
 # Grant sudoer access to "ancon"
 echo "ancon ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
-# Switch to "ancon" user
-sudo su - ancon
+# Switch to "ancon" user and execute subsequent commands as that user
+sudo -u ancon bash <<'EOF'
 
 # Create a .ssh directory
 mkdir -p ~/.ssh
@@ -28,7 +28,7 @@ cp /tmp/ip-info-app/terraform/20240228.pem ~/.ssh/20240228.pem || { echo "Error:
 chmod 400 ~/.ssh/20240228.pem || { echo "Error: Setting permissions on key-pair file failed"; exit 1; }
 
 # Define inventory file
-cat <<EOF > inventory.ini
+sudo tee ~/.ssh/inventory.ini <<'EOF2'
 [all]
 java_jenkins_maven ansible_host=10.0.1.6
 nexus ansible_host=10.0.2.5
@@ -37,7 +37,7 @@ nexus ansible_host=10.0.2.5
 ansible_user=ec2-user
 ansible_ssh_private_key_file="~/.ssh/20240228.pem"
 ansible_ssh_common_args="-o StrictHostKeyChecking=no"
-EOF
+EOF2
 
 # Remove the terraform and ip-info-app folders
 rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error: Removing folders failed"; exit 1; }
@@ -49,9 +49,10 @@ sudo wget -O /tmp/java.tar.gz https://corretto.aws/downloads/latest/amazon-corre
 sudo wget -O /tmp/nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix.tar.gz
 
 # Run the playbooks
-ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml -vvv
-ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml -vvv
-ansible-playbook -i ~/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/kube-argo-jump.yml -vvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml -vvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml -vvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/kube-argo-jump.yml -vvv
+
 EOF
 
 echo "Setup completed successfully."
