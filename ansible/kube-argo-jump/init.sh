@@ -15,7 +15,7 @@ echo "ancon:ancon" | sudo chpasswd
 echo "ancon ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
 # Switch to "ancon" user
-sudo su - ancon << EOF
+sudo su - ancon
 
 # Create a .ssh directory
 mkdir -p ~/.ssh
