@@ -48,8 +48,8 @@ resource "aws_instance" "kube_argo_jump" {
                         wget -O /tmp/init.sh https://raw.githubusercontent.com/nahorov/ip-info-app/master/ansible/kube-argo-jump/init.sh
                         chmod +x /tmp/init.sh
                
-                        sh /tmp/init.sh >> /tmp/diagnosis.log
-			sudo su - ancon -c 'sh /tmp/ip-info-app/ansible/kube-argo-jump/setup-ancon.sh >> /tmp/diagnosis.log'
+                        sh /tmp/init.sh >> /tmp/init-diagnosis.log
+			sudo su - ancon -c 'sudo chmod +x /tmp/ip-info-app/ansible/kube-argo-jump/setup-ancon.sh ; sudo sh /tmp/ip-info-app/ansible/kube-argo-jump/setup-ancon.sh >> /tmp/ancon-diagnosis.log'
 			
                        EOF
 }
