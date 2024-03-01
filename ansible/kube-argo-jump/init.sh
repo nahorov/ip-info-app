@@ -15,7 +15,7 @@ echo "ancon:ancon" | sudo chpasswd
 echo "ancon ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
 # Switch to "ancon" user and execute subsequent commands as that user
-sudo -u ancon bash <<'EOF'
+sudo -u ancon bash <<EOF
 
 # Create a .ssh directory
 mkdir -p ~/.ssh
@@ -28,7 +28,7 @@ cp /tmp/ip-info-app/terraform/20240228.pem ~/.ssh/20240228.pem || { echo "Error:
 chmod 400 ~/.ssh/20240228.pem || { echo "Error: Setting permissions on key-pair file failed"; exit 1; }
 
 # Define inventory file
-tee ~/.ssh/inventory.ini >/dev/null <<'2-end-of-file'
+tee ~/.ssh/inventory.ini >/dev/null <<EOF2
 [all]
 java_jenkins_maven ansible_host=10.0.1.6
 nexus ansible_host=10.0.2.5
@@ -37,7 +37,7 @@ nexus ansible_host=10.0.2.5
 ansible_user=ec2-user
 ansible_ssh_private_key_file="~/.ssh/20240228.pem"
 ansible_ssh_common_args="-o StrictHostKeyChecking=no"
-2-end-of-file
+EOF2
 
 # Run the rest of the commands
 # Remove the terraform and ip-info-app folders
