@@ -15,8 +15,7 @@ echo "ancon:ancon" | sudo chpasswd
 echo "ancon ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
 # Switch to "ancon" user and execute subsequent commands as that user
-sudo -u ancon bash <<EOF
-
+sudo -u ancon bash -c '
 # Create a .ssh directory
 mkdir -p ~/.ssh
 
@@ -54,7 +53,6 @@ ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-m
 ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml -vvv
 ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/kube-argo-jump.yml -vvv
 
-EOF
-
 echo "Setup completed successfully."
+'
 
