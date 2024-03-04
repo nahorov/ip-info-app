@@ -7,7 +7,7 @@
       ansible.builtin.copy:
         src: "/tmp/java.tar.gz"
         dest: "/tmp/java.tar.gz"
-        mode: "0644"
+        mode: "0666"
         remote_src: false
 
     - name: Copy Nexus tarball to Nexus host
