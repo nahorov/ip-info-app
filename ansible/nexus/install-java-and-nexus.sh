@@ -12,43 +12,31 @@ install_java() {
 install_nexus() {
   echo "Installing Nexus..."
   tar -xf /tmp/nexus.tar.gz -C /opt/
-}
 
-# Function to configure Nexus with Jenkins
-configure_nexus_with_jenkins() {
-  echo "Configuring Nexus with Jenkins..."
-  jenkins_url="http://10.0.1.6:8080"
-  nexus_url="http://10.0.2.5:8082"
-  jenkins_username="admin"
-  jenkins_password="admin"
+  # Start Nexus (assuming Nexus is started via script or systemctl)
+  /opt/nexus/bin/nexus start
 
-  curl -X POST -u "$jenkins_username:$jenkins_password" -d "
-    import jenkins.model.*
-    import hudson.plugins.nexus.*
-    import hudson.plugins.nexus.NexusPublisher.DescriptorImpl
+  # Wait for Nexus to start (adjust sleep time as needed)
+  sleep 60
 
-    def instance = Jenkins.getInstanceOrNull()
-    if (instance != null) {
-      def nexusPublisher = new NexusPublisher('', '', '$nexus_url', '', '', '')
-      DescriptorImpl descriptor = nexusPublisher.getDescriptor()
-      descriptor.setNexusUrl('$nexus_url')
-      descriptor.save()
-      println 'Nexus URL updated successfully.'
-    } else {
-      println 'Jenkins instance not found.'
-    }
-  " "$jenkins_url/scriptText"
+  # Create a new user in Nexus
+  echo "Creating Nexus user..."
+  curl -X POST -u admin:admin123 --header "Content-Type: application/json" --data '{
+    "userId": "new_user",
+    "password": "new_password",
+    "firstName": "First",
+    "lastName": "Last",
+    "email": "user@example.com",
+    "status": "active"
+  }' http://localhost:8082/service/rest/v1/users
+
+  echo "Nexus user created successfully."
 }
 
 # Main function
 main() {
   install_java
   install_nexus
-
-  systemctl start nexus
-  systemctl enable nexus
-
-  configure_nexus_with_jenkins
 
   echo "Installation and configuration completed."
 }

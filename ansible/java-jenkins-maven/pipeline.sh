@@ -3,6 +3,8 @@
 # Variables
 JENKINS_HOME="/var/lib/jenkins"
 NEXUS_URL="http://10.0.2.5:8082"
+NEXUS_USERNAME="new_user"
+NEXUS_PASSWORD="new_password"
 NEXUS_CREDENTIALS_FILE="nexus_credentials.xml"
 JENKINS_JOB_CONFIG_FILE="jenkins_job_config.xml"
 PIPELINE_SCRIPT="pipeline.groovy"

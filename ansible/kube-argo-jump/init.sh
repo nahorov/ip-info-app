@@ -38,8 +38,8 @@ sudo wget -O /tmp/nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix
 sudo chmod 666 /tmp/nexus.tar.gz
 
 # Run the playbooks
-ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml -vvv
 ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml -vvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml -vvv
 ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/install-docker-kube-argo-helm.yml -vvv
 
 echo "Setup completed successfully."
