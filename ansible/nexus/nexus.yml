@@ -7,7 +7,8 @@
       ansible.builtin.copy:
         src: "/tmp/{{ item }}"
         dest: "/tmp/{{ item }}"
-        remote_src: yes
+        mode: "0666"
+        remote_src: true
       with_items:
         - java.tar.gz
         - nexus.tar.gz
