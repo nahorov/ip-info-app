@@ -5,13 +5,17 @@
   tasks:
     - name: Copy Java and Nexus tarballs to Nexus host
       ansible.builtin.copy:
-        src: "/tmp/{{ item }}"
-        dest: "/tmp/{{ item }}"
-        mode: "0666"
-        remote_src: true
-      with_items:
-        - java.tar.gz
-        - nexus.tar.gz
+        src: "/tmp/java.tar.gz"
+        dest: "/tmp/java.tar.gz"
+        mode: "0644"
+        remote_src: false
+
+    - name: Copy Nexus tarball to Nexus host
+      ansible.builtin.copy:
+        src: "/tmp/nexus.tar.gz"
+        dest: "/tmp/nexus.tar.gz"
+        mode: "0644"
+        remote_src: false
 
     - name: Copy install-java-and-nexus.sh script to Nexus host
       ansible.builtin.copy:
@@ -29,4 +33,3 @@
     - name: Display install-java-and-nexus.sh execution result
       debug:
         var: install_result.stdout_lines
-
