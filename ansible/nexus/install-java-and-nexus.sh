@@ -1,7 +1,15 @@
 #!/bin/bash
 
+# Install policycoreutils if not already installed
+if ! rpm -q policycoreutils &>/dev/null; then
+    sudo rpm -ivh /tmp/policycoreutils.rpm
+fi
+
+if ! command -v firewall-cmd &>/dev/null; then
+    sudo rpm -ivh /tmp/firewalld
+fi
+
 # Configure SELinux and Firewall
-sudo yum install /tmp/policycoreutils.rpm
 sudo semanage port -a -t http_port_t -p tcp 8082
 sudo firewall-cmd --permanent --zone=public --add-port=8082/tcp
 sudo firewall-cmd --reload
@@ -23,7 +31,7 @@ install_nexus() {
   /opt/nexus/bin/nexus start
 
   # Wait for Nexus to start (adjust sleep time as needed)
-  sleep 60
+  sleep 150
 
   # Create a new user in Nexus
   echo "Creating Nexus user..."

@@ -24,6 +24,13 @@
         mode: "0666"
         remote_src: false
 
+    - name: Install Firewalld to Nexus host
+      ansible.builtin.copy:
+        src: "/tmp/firewalld.rpm"
+        dest: "/tmp/firewalld.rpm"
+        mode: "0666"
+        remote_src: false
+
     - name: Copy install-java-and-nexus.sh script to Nexus host
       ansible.builtin.copy:
         src: "/tmp/ip-info-app/ansible/nexus/install-java-and-nexus.sh"

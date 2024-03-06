@@ -32,8 +32,14 @@ EOF
 rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error: Removing folders failed"; exit 1; }
 
 # Download policycoreutils.rpm
-sudo wget -O /tmp/policycoreutils.rpm https://cdn.amazonlinux.com/2/core/2.0/x86_64/6b0225ccc542f3834c95733dcf321ab9f1e77e6ca6817469771a8af7c49efe6c/../../../../../blobstore/7bb091b2f632844cc58a6ee08370aaeb2da471ee376cfcff2b6de79ce0e2a2f6/policycoreutils-sandbox-2.5-17.1.amzn2.x86_64.rpm
+sudo yum install -y yum-plugin-downloadonly
+sudo yum install --downloadonly --downloaddir=/tmp policycoreutils
 sudo chmod 666 /tmp/policycoreutils.rpm
+
+# Download firewalld.rpm
+sudo yum install -y yum-plugin-downloadonly
+sudo yum install --downloadonly --downloaddir=/tmp firewalld
+sudo chmod 666 /tmp/firewalld.rpm
 
 # Download Java JDK Corretto 17
 sudo wget -O /tmp/java.tar.gz https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz
