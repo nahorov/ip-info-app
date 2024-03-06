@@ -33,3 +33,4 @@
     - name: Display install-java-and-nexus.sh execution result
       debug:
         var: install_result.stdout_lines
+

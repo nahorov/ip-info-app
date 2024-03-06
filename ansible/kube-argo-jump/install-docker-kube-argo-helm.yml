@@ -5,3 +5,4 @@
     - name: Execute script.sh
       command: /bin/bash /tmp/ip-info-app/ansible/kube-argo-jump/script.sh
       become: yes
+
