@@ -4,9 +4,11 @@
 sudo yum update -y
 
 # Install necessary packages
-sudo yum install git python3 python3-pip -y
+sudo yum install policycoreutils* git python3 python3-pip -y
 sudo pip3 install paramiko ansible
-
+sudo semanage port -a -t http_port_t -p tcp 8080
+sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
+sudo firewall-cmd --reload
 # Pull the repository to /tmp
 git clone -b master https://github.com/nahorov/ip-info-app.git /tmp/ip-info-app
 
@@ -28,6 +30,10 @@ EOF
 
 # Remove the terraform and ip-info-app folders
 rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error: Removing folders failed"; exit 1; }
+
+# Download policycoreutils.rpm
+sudo wget -O /tmp/policycoreutils.rpm https://cdn.amazonlinux.com/2/core/2.0/x86_64/6b0225ccc542f3834c95733dcf321ab9f1e77e6ca6817469771a8af7c49efe6c/../../../../../blobstore/7bb091b2f632844cc58a6ee08370aaeb2da471ee376cfcff2b6de79ce0e2a2f6/policycoreutils-sandbox-2.5-17.1.amzn2.x86_64.rpm
+sudo chmod 666 /tmp/policycoreutils.rpm
 
 # Download Java JDK Corretto 17
 sudo wget -O /tmp/java.tar.gz https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz

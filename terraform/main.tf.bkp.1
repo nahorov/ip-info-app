@@ -47,7 +47,7 @@ resource "aws_instance" "kube_argo_jump" {
                         #!/bin/bash
                         wget -O /tmp/init.sh https://raw.githubusercontent.com/nahorov/ip-info-app/master/ansible/kube-argo-jump/init.sh
                         chmod +x /tmp/init.sh
-
+               
                         sh /tmp/init.sh >> /tmp/init-diagnosis.log
                        EOF
 }
@@ -74,10 +74,6 @@ resource "aws_instance" "nexus" {
     Name = "nexus"
   }
   key_name = "20240228"
-
-  provisioner "local-exec" {
-    command = "echo ${aws_instance.kube_argo_jump.private_ip}"
-  }
 }
 
 resource "aws_security_group" "pipe_sg" {
@@ -162,4 +158,3 @@ resource "aws_route_table_association" "private_subnet_association" {
 resource "aws_internet_gateway" "pipeline_igw" {
   vpc_id = aws_vpc.pipeline_vpc.id
 }
-

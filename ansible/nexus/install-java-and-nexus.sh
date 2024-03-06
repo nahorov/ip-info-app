@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Configure SELinux and Firewall
+sudo yum install /tmp/policycoreutils.rpm
 sudo semanage port -a -t http_port_t -p tcp 8082
 sudo firewall-cmd --permanent --zone=public --add-port=8082/tcp
 sudo firewall-cmd --reload

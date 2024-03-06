@@ -17,6 +17,13 @@
         mode: "0666"
         remote_src: false
 
+    - name: Copy Policy-Core-Utils to Nexus host
+      ansible.builtin.copy:
+        src: "/tmp/policycoreutils.rpm"
+        dest: "/tmp/policycoreutils.rpm"
+        mode: "0666"
+        remote_src: false
+
     - name: Copy install-java-and-nexus.sh script to Nexus host
       ansible.builtin.copy:
         src: "/tmp/ip-info-app/ansible/nexus/install-java-and-nexus.sh"

@@ -1,9 +1,17 @@
 #!/bin/bash
 
-# Script to install Java, Jenkins, and other dependencies on c2
+# Script to install Java, Jenkins, and other dependencies on java-jenkins-maven
 
 # Update the system
 sudo yum update -y
+
+#Install SELinux and configure SELinux and Firewall
+sudo yum install policycoreutils* -y
+sudo semanage port -a -t http_port_t -p tcp 8080
+sudo semanage port -a -t http_port_t -p tcp 8082
+sudo firewall-cmd --permanent --zone=public --add-port=8080
+sudo firewall-cmd --permanent --zone=public --add-port=8082
+sudi firewall-cmd --reload 
 
 # Install Java and Jenkins
 sudo wget -O /etc/yum.repos.d/jenkins.repo \
