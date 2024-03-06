@@ -33,7 +33,7 @@ rm -rf /tmp/ip-info-app/terraform /tmp/ip-info-app/ip-info-app || { echo "Error:
 
 # Download policycoreutils.rpm
 sudo yum install -y yum-plugin-downloadonly
-sudo yum install --downloadonly --downloaddir=/tmp policycoreutils
+sudo yum install --downloadonly --downloaddir=/tmp policycoreutils*
 sudo chmod 666 /tmp/policycoreutils.rpm
 
 # Download firewalld.rpm
@@ -50,10 +50,10 @@ sudo wget -O /tmp/nexus.tar.gz https://download.sonatype.com/nexus/3/latest-unix
 sudo chmod 666 /tmp/nexus.tar.gz
 
 # Run the playbooks
-ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml -vvv
-ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml -vvv
-ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/install-docker-kube-argo-helm.yml -vvv
-ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml -vvv > /tmp/init-diagnosis.log
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/nexus/nexus.yml -vvvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/java-jenkins-maven/java-jenkins-maven.yml -vvvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/install-docker-kube-argo-helm.yml -vvvv
+ansible-playbook -i ~/.ssh/inventory.ini /tmp/ip-info-app/ansible/kube-argo-jump/trigger-nexus.yml -vvvv
 
 echo "Setup completed successfully."
 
