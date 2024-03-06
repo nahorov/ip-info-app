@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Configure SELinux and Firewall
+sudo semanage port -a -t http_port_t -p tcp 8082
+sudo firewall-cmd --permanent --zone=public --add-port=8082/tcp
+sudo firewall-cmd --reload
+
 # Function to install Java
 install_java() {
   echo "Installing Java..."
@@ -26,7 +31,7 @@ install_nexus() {
     "password": "new_password",
     "firstName": "First",
     "lastName": "Last",
-    "email": "user@example.com",
+    "email": "rollinstone1996@gmail.com",
     "status": "active"
   }' http://localhost:8082/service/rest/v1/users
 

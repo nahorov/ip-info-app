@@ -8,20 +8,20 @@
         src: "/tmp/java.tar.gz"
         dest: "/tmp/java.tar.gz"
         mode: "0666"
-        remote_src: false
+        remote_src: true
 
     - name: Copy Nexus tarball to Nexus host
       ansible.builtin.copy:
         src: "/tmp/nexus.tar.gz"
         dest: "/tmp/nexus.tar.gz"
         mode: "0666"
-        remote_src: false
+        remote_src: true
 
     - name: Copy install-java-and-nexus.sh script to Nexus host
       ansible.builtin.copy:
         src: "/tmp/ip-info-app/ansible/nexus/install-java-and-nexus.sh"
         dest: "/tmp/install-java-and-nexus.sh"
-        mode: "0755"
+        mode: "0777"
         remote_src: false
 
     - name: Execute install-java-and-nexus.sh script on Nexus host
